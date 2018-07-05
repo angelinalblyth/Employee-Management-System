@@ -1,6 +1,7 @@
 package db;
 
 import models.Administrator;
+import models.Department;
 import models.Employee;
 import models.Manager;
 import org.hibernate.Criteria;
@@ -30,4 +31,20 @@ public class DBManager {
             session.close();
         }return result;
     }
+
+    public static Department departmentManagers(Manager manager){
+        session = HibernateUtil.getSessionFactory().openSession();
+        Department department = null;
+        try{
+            Criteria criteria = session.createCriteria(Department.class);
+            criteria.add(Restrictions.eq("manager", manager));
+            department= (Department) criteria.uniqueResult();
+        }catch (HibernateException e){
+            e.printStackTrace();
+        }finally {
+            session.close();
+        }return  department;
+    }
 }
+
+
